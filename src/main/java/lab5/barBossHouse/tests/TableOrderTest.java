@@ -6,12 +6,12 @@ import org.junit.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class TableOrderTest {
+class TableOrderTest {
 
     private TableOrder tableOrder;
 
     @Test
     void testGetOrderPrice() {
-
+        //  some code
     }
 }
