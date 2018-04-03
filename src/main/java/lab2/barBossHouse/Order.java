@@ -84,37 +84,23 @@ public class Order {
     }
 
     public Dish[] getDishArray() {
-        int counter = 0;
-        for (int i = 0; i < dishes.length; ++i) {
-            if (dishes[i] != null) {
-                ++counter;
-            }
-        } //todo: не нужен счетчик, если есть поле
-        Dish[] forReturn = new Dish[counter];
-        counter = 0;
-        for (int i = 0; i < dishes.length; ++i) { //todo:  и здесь используй System.arraycopy
-            if (dishes[i] != null) {
-                forReturn[counter] = dishes[i];
-                ++counter;
-            }
-        }
-        return forReturn;
+        Dish[] arr = new Dish[size];
+        System.arraycopy(dishes, 0, arr, 0, size);
+        return arr;
     }
 
     public double getOrderPrice() {
         double price = 0.0D;
-        for (int i = 0; i < dishes.length; i++) { //todo: уже был коммент, исправь этот косяк везде
-            if (dishes[i] != null) { //todo:  и здесь тоже
-                price += dishes[i].getPrice();
-            }
+        for (int i = 0; i < size; i++) { //todo: уже был коммент, исправь этот косяк везде
+            price += dishes[i].getPrice();
         }
         return price;
     }
 
     public int getDishAmount(String dishName) {
         int counter = 0;
-        for (int i = 0; i < dishes.length; i++) {//todo:
-            if (dishes[i] != null && dishes[i].getName().equals(dishName)) {//todo:
+        for (int i = 0; i < size; i++) {//todo:
+            if (dishes[i].getName().equals(dishName)) {//todo:
                 ++counter;
             }
         }
