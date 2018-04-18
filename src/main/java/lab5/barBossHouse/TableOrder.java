@@ -324,7 +324,7 @@ public class TableOrder implements Order {
 
     @Override
     public boolean remove(Object o) {
-        return false;
+
     }
 
     @Override
@@ -397,35 +397,34 @@ public class TableOrder implements Order {
     @Override
     public ListIterator<MenuItem> listIterator() {
         return new ListIterator<MenuItem>() {
+            int currentId = 0;
+            MenuItem lastReturned;
+
             @Override
             public boolean hasNext() {
-                return false;
+                return currentId < items.length;
             }
 
             @Override
             public MenuItem next() {
-                return null;
+                lastReturned = items[currentId++];
+                return lastReturned;
             }
 
             @Override
-            public boolean hasPrevious() {
-                return false;
-            }
+            public boolean hasPrevious() { return currentId > 0; }
 
             @Override
             public MenuItem previous() {
-                return null;
+                lastReturned = items[currentId--];
+                return lastReturned;
             }
 
             @Override
-            public int nextIndex() {
-                return 0;
-            }
+            public int nextIndex() { return currentId + 1; }
 
             @Override
-            public int previousIndex() {
-                return 0;
-            }
+            public int previousIndex() { return currentId -1;            }
 
             @Override
             public void remove() {
