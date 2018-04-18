@@ -11,6 +11,8 @@ public class Main {
 
         Tests labTest = new Tests();
 
+
+
         Customer customer = new Customer("Maxim", "Kozlyuk", LocalDate.of(1997, Month.DECEMBER, 23), Address.DEFAULT_ADDRESS);
         System.out.println("MY AGE: " + customer.getAge());
 
@@ -80,6 +82,16 @@ public class Main {
         labTest.outArr(labTest.getRandomTableOrder(10, 12).getSortMenuByPrice());
 
         //labTest.test_TOM();
+
+        System.out.println("\n\nAdd by id test");
+        LabList<Integer> list2 = new LabList<>();
+        list2.add(1);
+        list2.add(2);
+        list2.add(3);
+        list2.add(4);
+        list2.add(5);
+        list2.add(4,7);
+        System.out.println(list2);
 
         System.out.println("Done!");
     }

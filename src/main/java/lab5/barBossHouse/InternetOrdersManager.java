@@ -62,7 +62,7 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
         LabList<Order> custOrders = new LabList();
         for (int i = 0; i < queue.getCap(); i++) {
             if (queue.getEl(i).getCustomer().equals(customer)) {
-                custOrders.addEl(queue.getEl(i));
+                custOrders.add(queue.getEl(i));
             }
         }
         return custOrders.toArray(new Order[custOrders.getSize()]);

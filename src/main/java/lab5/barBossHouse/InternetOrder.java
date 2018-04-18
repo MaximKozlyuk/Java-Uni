@@ -2,13 +2,11 @@ package lab5.barBossHouse;
 
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.function.Predicate;
 
-public class InternetOrder implements Order {
+public class InternetOrder implements Order, Iterable<MenuItem> {
 
     private Customer customer;
     private LabList<MenuItem> menu;
@@ -54,7 +52,7 @@ public class InternetOrder implements Order {
                 //throw new UnlawfulActionException("underaged person cant buy alchogol");
             }
         }
-        menu.addEl(item);
+        menu.add(item);
         return true;
     }
 
@@ -152,7 +150,7 @@ public class InternetOrder implements Order {
         for (int i = 0; i < menuCopy.length; i++) {
             for (int j = i; j < menuCopy.length; j++) {
                 if (menuCopy[j] != null && !uniqNames.contains(menuCopy[j])) {
-                    uniqNames.addEl(menuCopy[j]);
+                    uniqNames.add(menuCopy[j]);
                     menuCopy[j] = null;
                 }
             }
@@ -172,11 +170,11 @@ public class InternetOrder implements Order {
         }
         // todo what todo ?
         TableOrder tbOrdForSort;
-        try {
+      //  try {
             tbOrdForSort = new TableOrder(sortedMenu, Customer.MATURE_UNKNOWN_CUSTOMER);
-        } catch (UnlawfulActionException exp) {
-            throw new UnlawfulActionException("birth date from future");
-        }
+      //  } catch (UnlawfulActionException exp) {
+      //      throw new UnlawfulActionException("birth date from future");
+     //   }
         return tbOrdForSort.getSortMenuByPrice();
     }
 
@@ -232,12 +230,30 @@ public class InternetOrder implements Order {
 
     @Override
     public boolean contains(Object o) {
+        if (!(o instanceof InternetOrder)) { return false; }
+        Iterator it = this.iterator();
+        while (it.hasNext()) {
+            if (it.next().equals(o)) { return true; }
+        }
         return false;
     }
 
     @Override
     public Iterator<MenuItem> iterator() {
-        return null;
+        return new Iterator<MenuItem>() {
+
+            private int currentId = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentId < menu.getSize() && menu.getSize() != 0;
+            }
+
+            @Override
+            public MenuItem next() {
+                return menu.getEl(currentId++);
+            }
+        };
     }
 
     @Override
@@ -247,89 +263,223 @@ public class InternetOrder implements Order {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        return menu.toArray(a);
     }
 
     //@Override
     //public boolean add(MenuItem menuItem) {return false;}
 
     @Override
-    public boolean remove(Object o) {
-        return false;
+    public boolean remove(Object o) { // todo test  / is cast necessary?
+       if ((!(o instanceof MenuItem)) ||  o == null)  { return false; }
+       for (int i = 0; i < menu.getSize(); i++) {
+           if (menu.getEl(i).equals(o)) {
+               menu.remove(i);
+               return true;
+           }
+       }
+       return false;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
+    public boolean containsAll(Collection<?> c) {   // todo test
+        if (menu.getSize() == 0 ) { return false; }
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        if (c == menu) { return true; }
+        try {
+            Iterator cIt = c.iterator();
+            while (cIt.hasNext()) {
+                if (!(menu.contains((MenuItem)cIt.next()))) { return false; }
+            }
+        } catch (ClassCastException exp) {
+            throw exp;
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends MenuItem> c) {
-        return false;
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        Iterator cIt = c.iterator();
+        try {
+            while (cIt.hasNext()) {
+                this.add((MenuItem) cIt.next());
+            }
+        } catch (ClassCastException exp) {
+            throw exp;
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends MenuItem> c) {
-        return false;
+        if (index > menu.getSize() || index < 0) { throw new IllegalArgumentException("Wrong index"); }
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        Iterator cIt = c.iterator();
+        while (cIt.hasNext()) {
+            menu.add(index++, (MenuItem)cIt.next());
+        }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        boolean isChanged = false;
+        Iterator cIt = c.iterator();
+        Object currentObj;
+        while (cIt.hasNext()) {
+            currentObj = cIt.next();
+            for (int i = 0; i < menu.getSize(); i++) {
+                if (currentObj.equals(menu.getEl(i))) {
+                    menu.remove(i);
+                    isChanged = true;
+                }
+            }
+        }
+        return isChanged;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        boolean isChanged = false;
+        Iterator cIt = c.iterator();
+        for (int i = 0; i < menu.getSize(); i++) {
+            if (!c.contains(menu.getEl(i))) {
+                menu.remove(i);
+                isChanged = true;
+            }
+        }
+        return isChanged;
     }
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < menu.getSize(); i++) {
+            menu.remove(i);
+        }
+        customer = null;
+        creationTime = null;
     }
 
     @Override
     public MenuItem get(int index) {
-        return null;
+        if (index < 0 || index > menu.getSize()) { throw  new IllegalArgumentException("too big or negative"); }
+        return menu.getEl(index);
     }
 
     @Override
     public MenuItem set(int index, MenuItem element) {
-        return null;
+        if (index < 0 || index > menu.getSize()) { throw  new IllegalArgumentException("too big or negative"); }
+        return menu.set(index, element);
     }
 
+    // todo add and shifts to right all elements
     @Override
     public void add(int index, MenuItem element) {
-
+        if (index < 0 || index > menu.getSize()) { throw  new IllegalArgumentException("too big or negative"); }
+        //menu.add();
     }
 
     @Override
     public MenuItem remove(int index) {
-        return null;
-    }
+        if (index < 0 || index > menu.getSize()) { throw  new IllegalArgumentException("too big or negative"); }
+        MenuItem removedItem = menu.getEl(index);
+        menu.remove(index);
+        return removedItem;
+}
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        if (!(o instanceof InternetOrder)) { return -1; }
+        for (int i = 0; i < menu.getSize(); i++) {
+            if (menu.getEl(i).equals(o)) { return i; }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        if (!(o instanceof InternetOrder)) { return -1; }
+        int lastId = -1;
+        for (int i = 0; i < menu.getSize(); i++) {
+            if (menu.getEl(i).equals(o)) { lastId = i; }
+        }
+        return lastId;
     }
 
     @Override
     public ListIterator<MenuItem> listIterator() {
-        return null;
+        return new ListIterator<MenuItem>() {
+            int currentId = 0;
+            MenuItem lastReturned;
+
+            @Override
+            public boolean hasNext() {
+                return currentId < menu.getSize() && menu.getSize() != 0;
+            }
+
+            @Override
+            public MenuItem next() {
+                lastReturned = menu.getEl(currentId++);
+                return lastReturned;
+            }       // todo id++ or ++id ???
+
+            @Override
+            public boolean hasPrevious() {
+                return currentId > 0;
+            }
+
+            @Override
+            public MenuItem previous() {
+                lastReturned = menu.getEl(currentId--);
+                return lastReturned;
+            }
+
+            @Override
+            public int nextIndex() {
+                return currentId + 1;
+            }
+
+            @Override
+            public int previousIndex() {
+                return currentId - 1;
+            }
+
+            @Override
+            public void remove() {
+                for (int i = 0; i < menu.getSize(); i++) {
+                    if (lastReturned.equals(menu.getEl(i))) {
+                        menu.remove(i);
+                    }
+                }
+            }
+
+            @Override
+            public void set(MenuItem menuItem) {
+                for (int i = 0; i < menu.getSize(); i++) {
+                    if (lastReturned.equals(menu.getEl(i))) {
+                        menu.set(i,menuItem);
+                    }
+                }
+            }
+
+            @Override
+            public void add(MenuItem menuItem) {
+                menu.add(menuItem);
+            }
+        };
     }
 
     @Override
     public ListIterator<MenuItem> listIterator(int index) {
-        return null;
+        return null;    // todo kak eto napisat
     }
 
     @Override
     public List<MenuItem> subList(int fromIndex, int toIndex) {
         return null;
+        // todo kak eto napisat
     }
 }

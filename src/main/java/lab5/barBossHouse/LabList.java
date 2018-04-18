@@ -1,6 +1,8 @@
 package lab5.barBossHouse;
 
-public class LabList<E> {
+import java.util.Iterator;
+
+public class LabList<E> implements Iterable<E> {
 
     // implements MyCollection<E> ???
 
@@ -39,7 +41,16 @@ public class LabList<E> {
         return this.size;
     }
 
-    public void addEl(E e) {
+    public void add (int index, E e) {
+        if (index < 0 || index > size) { throw new IllegalArgumentException("Wrong index"); }
+        // todo if 0 position
+        temp = first.next;
+        for (int i = 0; i < index-1; i++) { temp = temp.next; }
+        temp.next = new Node (e, temp.next);
+        size++;
+    }
+
+    public void add(E e) {
         if (last.item == null) {
             last.item = e;
         } else {
@@ -111,6 +122,16 @@ public class LabList<E> {
         return false;
     }
 
+    public E set (int index, E item) {
+        temp = first.next;
+        for (int i = 0; i < index; i++) {
+            temp = temp.next;
+        }
+        E previousItem = (E)temp.item;
+
+        return previousItem;
+    }
+
     public <T> T[] toArray(T[] a) {
         if (a.length < size)
             a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), size);
@@ -133,6 +154,35 @@ public class LabList<E> {
             tempLink = tempLink.next;
         }
         return str.toString();
+    }
+
+    @Override   // todo test
+    public int hashCode () {
+        temp = first.next;
+        int hash = temp.item.hashCode();
+        for (int i = 1; i < size; i++) {
+            temp = temp.next;
+            hash = hash ^ temp.item.hashCode();
+        }
+        return hash;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+
+            int currentId = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentId < size && size != 0;
+            }
+
+            @Override
+            public E next() {
+                return getEl(currentId++);
+            }
+        };
     }
 
     private class Node<E> {

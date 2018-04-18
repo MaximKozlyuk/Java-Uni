@@ -74,7 +74,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
         LabList<Order> custOrders = new LabList();
         for (int i = 0; i < orders.length; i++) {
             if (orders[i].getCustomer().equals(customer)) {
-                custOrders.addEl(orders[i]);
+                custOrders.add(orders[i]);
             }
         }
         return custOrders.toArray(new Order[custOrders.getSize()]);

@@ -2,7 +2,7 @@ package lab5.barBossHouse;
 
 public abstract class MenuItem implements Comparable<MenuItem> {
 
-    public static final double DEFAULT_PRICE = 0.0D;
+    private static final double DEFAULT_PRICE = 0.0D;
     private final double price;
     private final String title;
     private final String description;

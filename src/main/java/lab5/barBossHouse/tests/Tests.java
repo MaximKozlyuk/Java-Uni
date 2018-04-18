@@ -2,15 +2,21 @@ package lab5.barBossHouse.tests;
 
 import lab5.barBossHouse.*;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Random;
 
 public class Tests {
 
-    public static MenuItem[] items;
+    // test objects
+    public MenuItem[] items;
     public final Address address = new Address("Samara", 666, "Lenina", 17, "k", 6);
-    public final Customer customer = new Customer("Maxim", "Kozlyuk", Customer.DEFAULT_BIRTH_DATE, Address.DEFAULT_ADDRESS);
+    public final Customer customer = new Customer("Maxim", "Kozlyuk", LocalDate.of(1997, Month.DECEMBER,23), Address.DEFAULT_ADDRESS);
     public TableOrdersManager tableOrdersManager;
     public InternetOrdersManager internetOrdersManager;
+
+    public final InternetOrder internetOrder;
+    public TableOrder tableOrder;
 
     public Tests() {
         items = new MenuItem[7];
@@ -21,6 +27,9 @@ public class Tests {
         items[4] = new Dish("Steak", "Yesterday it was running in a meadow", 750);
         items[5] = new Dish("Salad", "Fresh vegetables", 300);
         items[6] = new Dish("Borscht", "National dish", 500);
+
+        internetOrder = new InternetOrder(items, customer);
+        tableOrder = new TableOrder(items, customer);
 
         tableOrdersManager = new TableOrdersManager(10);
         for (int i = 0; i < 5; i++) {

@@ -17,7 +17,8 @@ public class TableOrder implements Order {
         this(DEFAULT_CAP, new Customer());
     }
 
-    public TableOrder(int amountOfItems, Customer customer) throws NegativeSizeException {
+    public TableOrder(int amountOfItems, Customer customer) // throws NegativeSizeException  // todo exp?
+    {
         if (amountOfItems < 0) {
             throw new NegativeSizeException("array size < 0");
         }
@@ -28,11 +29,12 @@ public class TableOrder implements Order {
     }
 
     // todo might be added alc drinks, check arr and customer / resolved
-    public TableOrder(MenuItem[] items, Customer customer) throws UnlawfulActionException {
+    public TableOrder(MenuItem[] items, Customer customer) // throws UnlawfulActionException // todo exp
+    {
         if (customer.getAge() < Customer.AGE_OF_MAJORITY) {
             for (MenuItem i : items) {
                 if (i instanceof Drink && ((Drink) i).getAlcPct() > 0) {
-                    throw new UnlawfulActionException("under aged person cant buy alcohol");
+                    // throw new UnlawfulActionException("under aged person cant buy alcohol");     // todo exp
                 }
             }
         }
@@ -320,11 +322,6 @@ public class TableOrder implements Order {
         return a;
     }
 
-    /*
-    @Override
-    public boolean add(MenuItem menuItem) { }
-    */
-
     @Override
     public boolean remove(Object o) {
         return false;
@@ -399,7 +396,52 @@ public class TableOrder implements Order {
 
     @Override
     public ListIterator<MenuItem> listIterator() {
-        return null;
+        return new ListIterator<MenuItem>() {
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            @Override
+            public MenuItem next() {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+
+            @Override
+            public MenuItem previous() {
+                return null;
+            }
+
+            @Override
+            public int nextIndex() {
+                return 0;
+            }
+
+            @Override
+            public int previousIndex() {
+                return 0;
+            }
+
+            @Override
+            public void remove() {
+
+            }
+
+            @Override
+            public void set(MenuItem menuItem) {
+
+            }
+
+            @Override
+            public void add(MenuItem menuItem) {
+
+            }
+        };
     }
 
     @Override
