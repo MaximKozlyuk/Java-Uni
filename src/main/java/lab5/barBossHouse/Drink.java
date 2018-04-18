@@ -2,7 +2,7 @@ package lab5.barBossHouse;
 
 public final class Drink extends MenuItem implements Alcoholable {
 
-    public static final byte DEFAULT_PCT = 0;
+    private static final byte DEFAULT_PCT = 0;
     private final DrinkTypeEnum drinkType;
     private final byte alcPct;
 
