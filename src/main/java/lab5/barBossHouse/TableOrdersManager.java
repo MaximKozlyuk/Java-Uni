@@ -1,17 +1,12 @@
 package lab5.barBossHouse;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class TableOrdersManager implements OrdersManager, List<Order> {
 
     private Order[] orders;
-
-    private Iterator<TableOrder> iterator;
 
     public TableOrdersManager(int tablesAmount) throws NegativeSizeException {
         if (tablesAmount < 0) {
@@ -26,10 +21,6 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
             throw new AlreadyAddedException("Table " + index + " is busy");
         }
         orders[index] = element;
-    }
-
-    public Order getOrder(int tableNum) {
-        return this.orders[tableNum];
     }
 
     @Override
@@ -71,7 +62,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
         if (customer == null) {
             throw new NullPointerException("null Customer");
         }
-        LabList<Order> custOrders = new LabList();
+        MyList<Order> custOrders = new MyList();
         for (int i = 0; i < orders.length; i++) {
             if (orders[i].getCustomer().equals(customer)) {
                 custOrders.add(orders[i]);
@@ -81,12 +72,8 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     }
 
     public void addItemToOrd(int tableNum, MenuItem item) throws UnlawfulActionException {
-        if (tableNum < 0) {
-            throw new IllegalArgumentException("Illegal table number: " + tableNum);
-        }
-        if (item == null) {
-            throw new NullPointerException("MenuItem is null");
-        }
+        if (tableNum < 0) { throw new IndexOutOfBoundsException("Illegal table number: " + tableNum); }
+        if (item == null) { throw new NullPointerException("MenuItem is null"); }
         // try {
         this.orders[tableNum].add(item);
         // } catch (UnlawfulActionException exp) { // todo exp
@@ -164,7 +151,6 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
         }
     }
 
-    // todo test just in case
     public int[] getAllFreeId () {
         return getAllId((t) -> t == null);
     }
@@ -205,21 +191,17 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     }
 
 
-    // generated methods
+    // lab 5
 
     @Override
     public boolean addAll(int index, Collection<? extends Order> c) {   // todo understand logic
-        if (index < 0 || index >= orders.length) {
-            throw new IndexOutOfBoundsException("Illegal table number: " + index);
-        }
-        if (c == null) {
-            throw new NullPointerException("Collection is null");
-        }
+        if (index < 0 || index >= orders.length) { throw new IndexOutOfBoundsException("Illegal table number: " + index); }
+        if (c == null) { throw new NullPointerException("Collection is null"); }
         while (c.iterator().hasNext()) {
             try {
                 orders[getFreeTableID()] = c.iterator().next();
             } catch (NoFreeTableException e) {
-                throw new NoFreeTableException("not enough space to add all orders");
+                throw new NoFreeTableException("not enough space to addLast all orders");
             }
         }
         return true;
@@ -232,17 +214,13 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public Order get(int index) {
-        if (orders[index] == null) {
-            return null;
-        }
-        return orders[index];   // todo clone?
+        if (index < 0 || index > orders.length) { throw new IndexOutOfBoundsException(); }
+        return orders[index];
     }
 
     @Override
     public Order set(int index, Order element) {
-        if (index < 0 || index >= orders.length) {
-            throw new IndexOutOfBoundsException("Illegal table number: " + index);
-        }
+        if (index < 0 || index >= orders.length) { throw new IndexOutOfBoundsException("Illegal table number: " + index); }
         Order oldOrd = orders[index];
         orders[index] = element;
         return oldOrd;
@@ -250,9 +228,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public Order remove(int index) {
-        if (index < 0 || index >= orders.length) {
-            throw new IndexOutOfBoundsException("Illegal table number: " + index);
-        }
+        if (index < 0 || index >= orders.length) { throw new IndexOutOfBoundsException("Illegal table number: " + index); }
         Order removedOrd = orders[index];
         orders[index] = null;
         return removedOrd;
@@ -260,9 +236,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public boolean add(Order menuItems) {
-        if (!(menuItems instanceof TableOrder)) {
-            return false;
-        }
+        if (!(menuItems instanceof TableOrder)) { throw new ClassCastException(); }
         try {
             orders[getFreeTableID()] = menuItems;
             return true;
@@ -273,32 +247,116 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public boolean remove(Object o) {
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof TableOrder)) { throw new ClassCastException(); }
+        for (int i = 0; i < orders.length; i++) {
+            if (o.equals(orders[i])) {
+                orders[i] = null;
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof TableOrder)) { throw new ClassCastException(); }
+        for (int i = 0; i < orders.length; i++) {
+            if (o.equals(orders[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof TableOrder)) { throw new ClassCastException(); }
+        int lastId = -1;
+        for (int i = 0; i < orders.length; i++) {
+            if (o.equals(orders[i])) {
+                lastId = i;
+            }
+        }
+        return lastId;
     }
 
     @Override
-    public ListIterator<Order> listIterator() {
-        return null;
+    public ListIterator<Order> listIterator(){
+        return new ListIterator<Order>() {
+            int currentId = 0;
+            Order lastReturned;
+
+            @Override
+            public void set(Order menuItems) {
+                orders[currentId] = menuItems;
+            }
+
+            @Override
+            public void add(Order menuItems) {
+                orders[getFreeTableID()] = menuItems;
+            }
+
+            @Override
+            public void remove() {
+                orders[currentId] = null;
+            }
+
+            @Override
+            public boolean hasNext() {
+                return currentId < orders.length && orders.length != 0;
+            }
+
+            @Override
+            public Order next() {
+                lastReturned = orders[currentId++];
+                return lastReturned;
+            }       // todo id++ or ++id ???
+
+            @Override
+            public boolean hasPrevious() {
+                return currentId > 0;
+            }
+
+            @Override
+            public Order previous() {
+                lastReturned = orders[currentId--];
+                return lastReturned;
+            }
+
+            @Override
+            public int nextIndex() {
+                return currentId + 1;
+            }
+
+            @Override
+            public int previousIndex() {
+                return currentId - 1;
+            }
+        };
     }
 
     @Override
     public ListIterator<Order> listIterator(int index) {
-        return null;
+        if (index < 0) { throw new IndexOutOfBoundsException(); }
+        ListIterator iterator = listIterator();
+        for (int i = 0; i < index; i++) {
+            iterator.next();
+        }
+        return iterator;
     }
 
     @Override
     public List<Order> subList(int fromIndex, int toIndex) {
-        return null;
+        if (fromIndex == toIndex) { return new ArrayList<>(); }
+        if (fromIndex < 0 || toIndex < 0 || toIndex > orders.length) { throw new IndexOutOfBoundsException(); }
+        LinkedList<Order> sublist = new LinkedList<>();
+        for (; fromIndex < toIndex; fromIndex++) {
+            sublist.add(orders[fromIndex]);
+        }
+        return sublist;
     }
 
     @Override
@@ -317,41 +375,83 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public boolean contains(Object o) {
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof TableOrder)) { throw new ClassCastException(); }
+        for (int i = 0; i < orders.length; i++) {
+            if (o.equals(orders[i])) {
+                return true;
+            }
+        }
         return false;
     }
 
     @Override
     public Iterator<Order> iterator() {
-        return null;
+        return new Iterator<Order>() {
+            int currentId = 0;
+
+            @Override
+            public boolean hasNext() {
+                return currentId < orders.length;
+            }
+
+            @Override
+            public Order next() {
+                return orders[currentId++];
+            }
+        };
     }
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Order[] ordersCopy = new Order[orders.length];
+        System.arraycopy(orders,0,ordersCopy,0,orders.length);
+        return ordersCopy;
     }
 
-    @Override
+    @Override       // todo implement
     public <T> T[] toArray(T[] a) {
         return null;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException(); }
+        Iterator iterator = c.iterator();
+        while (iterator.hasNext()) {
+            if (contains(iterator.next())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        return reSmthAll((t) -> c.contains(t), c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return reSmthAll((t) -> !c.contains(t), c);
+    }
+
+    private boolean reSmthAll (Predicate<Collection<?>> predicate, Collection<?> c) {
+        if (c == null) { throw new NullPointerException(); }
+        boolean isChanged = false;
+        for (int i = 0; i < orders.length; i++) {
+            if (predicate.test(orders[i])) {
+                orders[i] = null;
+                isChanged = true;
+            }
+        }
+        return isChanged;
     }
 
     @Override
     public void clear() {
-
+        for (int i = 0; i < orders.length; i++) {
+            orders[i] = null;
+        }
     }
 }

@@ -9,18 +9,18 @@ import java.util.function.Predicate;
 public class InternetOrder implements Order, Iterable<MenuItem> {
 
     private Customer customer;
-    private LabList<MenuItem> menu;
+    private MyList<MenuItem> menu;
 
     private LocalDateTime creationTime;
 
     public InternetOrder() {
-        menu = new LabList<MenuItem>();
+        menu = new MyList<MenuItem>();
         customer = new Customer();
         creationTime = LocalDateTime.now();
     }
 
     public InternetOrder(MenuItem[] menu, Customer customer) {
-        this.menu = new LabList<MenuItem>(menu);
+        this.menu = new MyList<MenuItem>(menu);
         this.customer = customer.clone();
         creationTime = LocalDateTime.now();
     }
@@ -142,7 +142,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
 
     @Override
     public String[] getNoCopiesNames() { // возвращаем массив названийц блюд без повторов
-        LabList<String> uniqNames = new LabList<String>();
+        MyList<String> uniqNames = new MyList<String>();
         String[] menuCopy = new String[menu.getSize()];
         for (int i = 0; i < menuCopy.length; i++) {
             menuCopy[i] = menu.getEl(i).getName();
@@ -216,7 +216,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
         return true;
     }
 
-    // list methods
+    // list methods, lab 5
 
     @Override
     public int size() {
@@ -230,7 +230,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
 
     @Override
     public boolean contains(Object o) {
-        if (!(o instanceof InternetOrder)) { return false; }
+        if (!(o instanceof InternetOrder)) { throw new ClassCastException(); }
         Iterator it = this.iterator();
         while (it.hasNext()) {
             if (it.next().equals(o)) { return true; }
@@ -266,9 +266,6 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
         return menu.toArray(a);
     }
 
-    //@Override
-    //public boolean add(MenuItem menuItem) {return false;}
-
     @Override
     public boolean remove(Object o) { // todo test  / is cast necessary?
        if ((!(o instanceof MenuItem)) ||  o == null)  { return false; }
@@ -282,7 +279,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {   // todo test
+    public boolean containsAll(Collection<?> c) {
         if (menu.getSize() == 0 ) { return false; }
         if (c == null) { throw new NullPointerException("specified collection in null"); }
         if (c == menu) { return true; }
@@ -313,7 +310,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
 
     @Override
     public boolean addAll(int index, Collection<? extends MenuItem> c) {
-        if (index > menu.getSize() || index < 0) { throw new IllegalArgumentException("Wrong index"); }
+        if (index > menu.getSize() || index < 0) { throw new IndexOutOfBoundsException("Wrong index"); }
         if (c == null) { throw new NullPointerException("specified collection in null"); }
         Iterator cIt = c.iterator();
         while (cIt.hasNext()) {
@@ -344,7 +341,6 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
     public boolean retainAll(Collection<?> c) {
         if (c == null) { throw new NullPointerException("specified collection in null"); }
         boolean isChanged = false;
-        Iterator cIt = c.iterator();
         for (int i = 0; i < menu.getSize(); i++) {
             if (!c.contains(menu.getEl(i))) {
                 menu.remove(i);
@@ -375,11 +371,11 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
         return menu.set(index, element);
     }
 
-    // todo add and shifts to right all elements
+    // todo addLast and shifts to right all elements
     @Override
     public void add(int index, MenuItem element) {
         if (index < 0 || index > menu.getSize()) { throw  new IllegalArgumentException("too big or negative"); }
-        //menu.add();
+        //menu.addLast();
     }
 
     @Override
@@ -474,12 +470,20 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
 
     @Override
     public ListIterator<MenuItem> listIterator(int index) {
-        return null;    // todo kak eto napisat
+        ListIterator iterator = listIterator();
+        for (int i = 0; i < index; i++) { iterator.next(); }
+        return iterator;
     }
 
+    // можно конечно в своем листе заимплементить list и возращать его но чет лень
     @Override
     public List<MenuItem> subList(int fromIndex, int toIndex) {
-        return null;
-        // todo kak eto napisat
+        if (fromIndex == toIndex) { return new ArrayList<>(); }
+        if (fromIndex < 0 || toIndex < 0 || toIndex > menu.getSize()) { throw new IndexOutOfBoundsException(); }
+        LinkedList<MenuItem> sublist = new LinkedList<>();
+        for (; fromIndex < toIndex; fromIndex++) {
+            sublist.add(menu.getEl(fromIndex));
+        }
+        return sublist;
     }
 }

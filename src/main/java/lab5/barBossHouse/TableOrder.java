@@ -286,9 +286,8 @@ public class TableOrder implements Order {
 
     @Override
     public boolean contains(Object o) {
-        if (!(o instanceof TableOrder)) {
-            return false;
-        }
+        if (!(o instanceof TableOrder)) { throw new ClassCastException(); }
+        if (o == null) { throw new NullPointerException(); }
         for (MenuItem e : items) {
             if (e.equals(o)) {
                 return true;
@@ -324,32 +323,80 @@ public class TableOrder implements Order {
 
     @Override
     public boolean remove(Object o) {
-
+        if (!(o instanceof MenuItem)) { throw new ClassCastException(); }
+        if (o == null) { throw new NullPointerException(); }
+        for (int i = 0; i < size; i++) {
+            if (items[i].equals(o)) { remove(i); }
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException("specified collection in null"); }
+        try {
+            Iterator iterator = c.iterator();
+            while (iterator.hasNext()) {
+                if (!this.contains(iterator.next())) { return false; }
+            }
+        } catch (ClassCastException exp) {
+            throw exp;
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends MenuItem> c) {
-        return false;
+        if (c == null) { throw new NullPointerException(); }
+        Iterator iterator = c.iterator();
+        while (items.length - size < c.size()) { incMenuSize(); }
+        while (iterator.hasNext()) {
+            add((MenuItem)iterator.next());
+        }
+        return true;
     }
 
+    // todo test
     @Override
     public boolean addAll(int index, Collection<? extends MenuItem> c) {
-        return false;
+        if (c == null) { throw new NullPointerException(); }
+        if (index < 0 || index > size) { throw new IndexOutOfBoundsException(); }
+        while (items.length-size < c.size()) { incMenuSize(); }
+        System.arraycopy(items,index,items,index+c.size(),c.size());
+        System.arraycopy(c.toArray(), 0,items,index,c.size());
+        size += c.size();
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException(); }
+        boolean isRemovedAll = true;
+        Iterator iterator = c.iterator();
+        while (iterator.hasNext()) {
+            if (!remove(iterator.next())) {
+                isRemovedAll = false;
+            }
+        }
+        return isRemovedAll;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        if (c == null) { throw new NullPointerException(); }
+        boolean isChanged = false;
+        try {
+            for (int i = 0; i < size; i++) {
+                if (!c.contains(items[i])) {
+                    remove(i);
+                    isChanged = true;
+                }
+            }
+        } catch (ClassCastException exp) {
+            throw exp;
+        }
+        return isChanged;
     }
 
     @Override
@@ -366,9 +413,7 @@ public class TableOrder implements Order {
 
     @Override
     public MenuItem set(int index, MenuItem element) {
-        if (index < 0 || index >= items.length) {
-            throw new IndexOutOfBoundsException();
-        }
+        if (index < 0 || index >= items.length) { throw new IndexOutOfBoundsException(); }
         MenuItem oldItem = items[index];
         items[index] = element;
         return oldItem;
@@ -376,22 +421,45 @@ public class TableOrder implements Order {
 
     @Override
     public void add(int index, MenuItem element) {
-
+        if (index < 0 || index > size) { throw new IndexOutOfBoundsException(); }
+        if (element == null) { throw new NullPointerException(); }
+        if (items.length - size < 1) { incMenuSize(); }
+        System.arraycopy(items,index,items,index+1,(items.length-index)-items.length-size);
+        items[index] = element;
     }
 
     @Override
     public MenuItem remove(int index) {
-        return null;
+        if (index < 0 || index > size) { throw new IndexOutOfBoundsException(); }
+        MenuItem deletedItem = items[index];
+        items[index] = null;
+        removeHole(index);
+        return deletedItem;
     }
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof MenuItem)) { throw new ClassCastException(); }
+        for (int i = 0; i < size; i++) {
+            if (items[i].equals(o)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        if (o == null) { throw new NullPointerException(); }
+        if (!(o instanceof MenuItem)) { throw new ClassCastException(); }
+        int lastId = -1;
+        for (int i = 0; i < size; i++) {
+            if (items[i].equals(o)) {
+                lastId = i;
+            }
+        }
+        return lastId;
     }
 
     @Override
@@ -402,17 +470,19 @@ public class TableOrder implements Order {
 
             @Override
             public boolean hasNext() {
-                return currentId < items.length;
+                return currentId < size && size != 0;
             }
 
             @Override
             public MenuItem next() {
                 lastReturned = items[currentId++];
                 return lastReturned;
-            }
+            }       // todo id++ or ++id ???
 
             @Override
-            public boolean hasPrevious() { return currentId > 0; }
+            public boolean hasPrevious() {
+                return currentId > 0;
+            }
 
             @Override
             public MenuItem previous() {
@@ -421,35 +491,51 @@ public class TableOrder implements Order {
             }
 
             @Override
-            public int nextIndex() { return currentId + 1; }
+            public int nextIndex() {
+                return currentId + 1;
+            }
 
             @Override
-            public int previousIndex() { return currentId -1;            }
+            public int previousIndex() {
+                return currentId - 1;
+            }
 
             @Override
             public void remove() {
-
+                items[currentId] = null;
+                removeHole(currentId);
             }
 
             @Override
             public void set(MenuItem menuItem) {
-
+                items[currentId] = menuItem;
             }
 
             @Override
             public void add(MenuItem menuItem) {
-
+                if (items.length - size < 1) { incMenuSize(); }
+                System.arraycopy(items,currentId,items,currentId+1,(items.length-currentId)-items.length-size);
+                items[currentId] = menuItem;
             }
         };
     }
 
     @Override
     public ListIterator<MenuItem> listIterator(int index) {
-        return null;
+        if (index < 0) { throw new IndexOutOfBoundsException(); }
+        ListIterator iterator = listIterator();
+        for (int i = 0; i < index; i++) { iterator.next(); }
+        return iterator;
     }
 
     @Override
     public List<MenuItem> subList(int fromIndex, int toIndex) {
-        return null;
+        if (fromIndex == toIndex) { return new ArrayList<>(); }
+        if (fromIndex < 0 || toIndex < 0 || toIndex > size) { throw new IndexOutOfBoundsException(); }
+        LinkedList<MenuItem> sublist = new LinkedList<>();
+        for (; fromIndex < toIndex; fromIndex++) {
+            sublist.add(items[fromIndex]);
+        }
+        return sublist;
     }
 }

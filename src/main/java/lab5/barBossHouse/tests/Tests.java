@@ -35,7 +35,10 @@ public class Tests {
         for (int i = 0; i < 5; i++) {
             tableOrdersManager.add(tableOrdersManager.getFreeTableID(), getRandomTableOrder(2, 8));
         }
-
+        internetOrdersManager = new InternetOrdersManager();
+        for (int i = 0; i < 5; i ++) {
+            internetOrdersManager.add(getRandomInterOrder(2,8));
+        }
     }
 
     public MenuItem[] getRandomMenu(int min, int max) {
@@ -54,12 +57,12 @@ public class Tests {
     }
 
     public InternetOrder getRandomInterOrder(int min, int max) {
-        return new InternetOrder(this.getRandomMenu(min, max), customer);
+        return new InternetOrder(getRandomMenu(min, max), customer);
     }
 
     public TableOrder getRandomTableOrder(int min, int max) {
         try {
-            return new TableOrder(this.getRandomMenu(min, max), customer);
+            return new TableOrder(getRandomMenu(min, max), customer);
         } catch (Exception exp) {
             return null;
         }
