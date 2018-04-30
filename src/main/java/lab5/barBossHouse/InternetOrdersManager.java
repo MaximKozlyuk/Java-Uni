@@ -1,13 +1,15 @@
 package lab5.barBossHouse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.Iterator;
 
 public class InternetOrdersManager implements OrdersManager, Deque<Order> {
 
-    private MyDeque<InternetOrder> orders;
+    private MyDeque<Order> orders;
+    private Iterator i;
 
     public InternetOrdersManager() {
         this(null);
@@ -19,49 +21,57 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
         } else {
             orders = new MyDeque(orderArr.length);
             for (int i = 0; i < orderArr.length; i++) {
-                //orders.addLast(orderArr[i]);
+                orders.addLast(orderArr[i]);
             }
         }
     }
 
     @Override
-    public int getOrdersAtDay(LocalDate date) {
+    public int getOrdersAtDay(LocalDateTime date) {
         int counter = 0;
-        for (int i = 0; i < orders.getCap(); i++) {
-            if (isDateEquals(date, i)) {
-                ++counter;
+        i = orders.iterator();
+        while (i.hasNext()) {
+            if (isDateEquals(date, (InternetOrder)i.next())) {
+               counter++;
             }
         }
         return counter;
     }
 
     @Override
-    public Order[] getOrdersArrAtDay(LocalDate date) {
+    public Order[] getOrdersArrAtDay(LocalDateTime date) {
         Order[] arr = new InternetOrder[getOrdersAtDay(date)];
         int counter = 0;
-        for (int i = 0; i < orders.getCap(); i++) {
-            if (isDateEquals(date, i)) {
-                arr[counter++] = orders.element(i);
+        i = orders.iterator();
+        InternetOrder currentOrd;
+        while (i.hasNext()) {
+            currentOrd = (InternetOrder) i.next();
+            if (isDateEquals(date, currentOrd)) {
+                arr[counter++] = currentOrd;
             }
         }
         return arr;
     }
 
-    private boolean isDateEquals(LocalDate date, int i) {
-        return orders.element(i).getCreationTime().getYear() == date.getYear() &&
-                orders.element(i).getCreationTime().getMonth() == date.getMonth() &&
-                orders.element(i).getCreationTime().getDayOfMonth() == date.getDayOfMonth();
+    private boolean isDateEquals(LocalDateTime date, InternetOrder ord) {
+        return date.equals(ord.getCreationTime());
+        /*
+        return ord.getCreationTime().getYear() == date.getYear() &&
+                ord.getCreationTime().getMonth() == date.getMonth() &&
+                ord.getCreationTime().getDayOfMonth() == date.getDayOfMonth();
+        */
     }
 
     @Override
     public Order[] getCustomerOrders(Customer customer) {
-        if (customer == null) {
-            throw new NullPointerException("null Customer");
-        }
+        if (customer == null) { throw new NullPointerException(); }
         MyList<Order> custOrders = new MyList();
-        for (int i = 0; i < orders.getCap(); i++) {
-            if (orders.element(i).getCustomer().equals(customer)) {
-                custOrders.add(orders.element(i));
+        i = orders.iterator();
+        InternetOrder currentOrder;
+        while (i.hasNext()) {
+            currentOrder = (InternetOrder) i.next();
+            if (currentOrder.getCustomer().equals(customer)) {
+                custOrders.add(currentOrder);
             }
         }
         return custOrders.toArray(new Order[custOrders.getSize()]);
@@ -74,155 +84,153 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
 
     public InternetOrder[] getOrders() {
         InternetOrder[] arr = new InternetOrder[orders.size()];
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = orders.element(i);
+        i = orders.iterator();
+        int id = 0;
+        while (i.hasNext()) {
+            arr[id++] = (InternetOrder) i.next();
         }
         return arr;
     }
 
     public double getTotalCost() {
         double sumPrice = 0;
-        int size = orders.getCap();
-        for (int i = 0; i < size; i++) {
-            sumPrice += orders.element(i).getOrderPrice();
+        i = orders.iterator();
+        while (i.hasNext()) {
+            sumPrice += ((InternetOrder)i.next()).getOrderPrice();
         }
         return sumPrice;
     }
 
     public int getItemAmount(String name) {
-        int counter = 0;
-        int size = orders.getCap();
-        for (int i = 0; i < size; i++) {
-            counter += orders.element(i).getItemsAmount(name);
+        if (name == null) { throw new NullPointerException(); }
+        int items = 0;
+        i = orders.iterator();
+        while (i.hasNext()) {
+            items += ((InternetOrder)i.next()).getItemsAmount(name);
         }
-        return counter;
+        return items;
     }
 
     public int getItemAmount(MenuItem item) {
-        int counter = 0;
-        int size = orders.getCap();
-        for (int i = 0; i < size; i++) {
-            counter += orders.element(i).getItemsAmount(item);
+        int items = 0;
+        if (item == null) { throw new NullPointerException(); }
+        i = orders.iterator();
+        while (i.hasNext()) {
+            items += ((InternetOrder)i.next()).getItemsAmount(item);
         }
-        return counter;
+        return items;
     }
 
-    // generated methods
+    // implemented methods
 
     @Override
-    public void addFirst(Order menuItems) {
-        if (menuItems == null) { throw new NullPointerException(); }
-        if (!(menuItems instanceof InternetOrder)) { throw new ClassCastException(); }
-
-    }
-
-    @Override
-    public void addLast(Order menuItems) {
-        if (menuItems == null) { throw new NullPointerException(); }
-        if (!(menuItems instanceof InternetOrder)) { throw new ClassCastException(); }
-        //if (!orders.addLast((InternetOrder)menuItems)) {
-        //    throw new IllegalStateException();
-        //}
+    public void addFirst(Order order) {
+        orders.addFirst((InternetOrder) order);
     }
 
     @Override
-    public boolean offerFirst(Order menuItems) {
-        return false;
+    public void addLast(Order order) {
+        orders.addLast((InternetOrder) order);
     }
 
     @Override
-    public boolean offerLast(Order menuItems) {
-        return false;
+    public boolean offerFirst(Order order) {
+        return orders.offerFirst((InternetOrder) order);
     }
 
     @Override
-    public Order removeFirst() {
-        return null;
+    public boolean offerLast(Order order) {
+        return orders.offerLast((InternetOrder) order);
     }
 
     @Override
-    public Order removeLast() {
-        return null;
+    public InternetOrder removeFirst() {
+        return (InternetOrder)orders.removeFirst();
     }
 
     @Override
-    public Order pollFirst() {
-        return null;
+    public InternetOrder removeLast() {
+        return (InternetOrder)orders.removeLast();
     }
 
     @Override
-    public Order pollLast() {
-        return null;
+    public InternetOrder pollFirst() {
+        return (InternetOrder)orders.pollFirst();
     }
 
     @Override
-    public Order getFirst() {
-        return null;
+    public InternetOrder pollLast() {
+        return (InternetOrder)orders.pollLast();
     }
 
     @Override
-    public Order getLast() {
-        return null;
+    public InternetOrder getFirst() {
+        return (InternetOrder)orders.getFirst();
     }
 
     @Override
-    public Order peekFirst() {
-        return null;
+    public InternetOrder getLast() {
+        return (InternetOrder)orders.getLast();
     }
 
     @Override
-    public Order peekLast() {
-        return null;
+    public InternetOrder peekFirst() {
+        return (InternetOrder)orders.peekFirst();
+    }
+
+    @Override
+    public InternetOrder peekLast() {
+        return (InternetOrder)orders.peekLast();
     }
 
     @Override
     public boolean removeFirstOccurrence(Object o) {
-        return false;
+        return orders.removeFirstOccurrence(o);
     }
 
     @Override
     public boolean removeLastOccurrence(Object o) {
-        return false;
+        return orders.removeLastOccurrence(o);
     }
 
     @Override
-    public boolean offer(Order menuItems) {
-        return false;
+    public boolean offer(Order order) {
+        return orders.offer((InternetOrder) order);
     }
 
     @Override
-    public Order remove() {
-        return null;
+    public InternetOrder remove() {
+        return (InternetOrder)orders.remove();
     }
 
     @Override
-    public Order poll() {
-        return null;
+    public InternetOrder poll() {
+        return (InternetOrder)orders.poll();
     }
 
     @Override
-    public Order element() {
-        return null;
+    public InternetOrder element() {
+        return (InternetOrder)orders.element();
     }
 
     @Override
-    public Order peek() {
-        return null;
+    public InternetOrder peek() {
+        return (InternetOrder)orders.peek();
     }
 
     @Override
-    public void push(Order menuItems) {
-
+    public void push(Order order) {
+        orders.push(order);
     }
 
     @Override
-    public Order pop() {
-        return null;
+    public InternetOrder pop() {
+        return (InternetOrder) orders.pop();
     }
 
     @Override
     public Iterator<Order> descendingIterator() {
-        return null;
+        return orders.descendingIterator();
     }
 
     @Override
@@ -253,8 +261,8 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
             }
 
             @Override
-            public Order next() {
-                return orders.element(currentId++);
+            public InternetOrder next() {
+                return (InternetOrder) orders.element(currentId++);
             }
         };
     }
@@ -265,7 +273,7 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
+    public <T> T[] toArray(T[] a) { // todo this govno
         if (a.length < orders.size())
             a = (T[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), orders.size());
         //int i = 0;
@@ -283,39 +291,38 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
     }
 
     @Override
-    public boolean add(Order menuItems) {
-        return true;
-       // return addLast(menuItems); // todo ???
+    public boolean add(Order order) {
+        return orders.add(order);
     }
 
     @Override
     public boolean remove(Object o) {
-        return false;
+        return orders.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        return orders.containsAll(c);
     }
 
     @Override
     public boolean addAll(Collection<? extends Order> c) {
-        return false;
+        return orders.addAll(c);
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        return orders.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        return orders.retainAll(c);
     }
 
     @Override
     public void clear() {
-        while (orders.size() > 0) {
+        while (!orders.isEmpty()) {
             orders.poll();
         }
     }

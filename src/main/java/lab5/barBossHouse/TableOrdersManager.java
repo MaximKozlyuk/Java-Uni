@@ -1,6 +1,7 @@
 package lab5.barBossHouse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -24,7 +25,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     }
 
     @Override
-    public int getOrdersAtDay(LocalDate date) {
+    public int getOrdersAtDay(LocalDateTime date) {
         int counter = 0;
         for (int i = 0; i < orders.length; i++) {
             if (orders[i] == null) {
@@ -40,7 +41,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     }
 
     @Override
-    public Order[] getOrdersArrAtDay(LocalDate date) {
+    public Order[] getOrdersArrAtDay(LocalDateTime date) {
         Order[] arr = new TableOrder[getOrdersAtDay(date)];
         int counter = 0;
         for (int i = 0; i < orders.length; i++) {

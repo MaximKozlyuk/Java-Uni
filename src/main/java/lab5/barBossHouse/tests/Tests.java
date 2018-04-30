@@ -10,8 +10,12 @@ public class Tests {
 
     // test objects
     public MenuItem[] items;
-    public final Address address = new Address("Samara", 666, "Lenina", 17, "k", 6);
-    public final Customer customer = new Customer("Maxim", "Kozlyuk", LocalDate.of(1997, Month.DECEMBER,23), Address.DEFAULT_ADDRESS);
+    public final Address address = new Address("Samara", 666,
+            "Lenina", 17, "k", 6);
+
+    public final Customer customer = new Customer("Maxim", "Kozlyuk",
+            LocalDate.of(1997, Month.DECEMBER,23), Address.DEFAULT_ADDRESS);
+
     public TableOrdersManager tableOrdersManager;
     public InternetOrdersManager internetOrdersManager;
 
@@ -20,9 +24,15 @@ public class Tests {
 
     public Tests() {
         items = new MenuItem[7];
-        items[0] = new Drink("French Vine", "simple dry red wine", 100.22, DrinkTypeEnum.WINE, (byte) 12);
-        items[1] = new Drink("Italian Vine", "white wine", 100.21, DrinkTypeEnum.WINE, (byte) 10);
-        items[2] = new Drink("Jagermaister", "orange deer", 1200, DrinkTypeEnum.JAGERMAISTER, (byte) 35);
+        items[0] = new Drink("French Vine", "simple dry red wine",
+                100.22, DrinkTypeEnum.WINE, (byte) 12);
+
+        items[1] = new Drink("Italian Vine", "white wine",
+                100.21, DrinkTypeEnum.WINE, (byte) 10);
+
+        items[2] = new Drink("Jagermaister", "orange deer",
+                1200, DrinkTypeEnum.JAGERMAISTER, (byte) 35);
+
         items[3] = new Drink("Coffee", "arabica", 75, DrinkTypeEnum.COFEE);
         items[4] = new Dish("Steak", "Yesterday it was running in a meadow", 750);
         items[5] = new Dish("Salad", "Fresh vegetables", 300);

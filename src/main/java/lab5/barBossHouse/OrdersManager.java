@@ -1,6 +1,7 @@
 package lab5.barBossHouse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public interface OrdersManager extends Collection<Order> {
@@ -15,9 +16,9 @@ public interface OrdersManager extends Collection<Order> {
 
     int getItemAmount(MenuItem item);
 
-    int getOrdersAtDay(LocalDate date);
+    int getOrdersAtDay(LocalDateTime date);
 
-    Order[] getOrdersArrAtDay(LocalDate date);
+    Order[] getOrdersArrAtDay(LocalDateTime date);
 
     Order[] getCustomerOrders(Customer customer);
 

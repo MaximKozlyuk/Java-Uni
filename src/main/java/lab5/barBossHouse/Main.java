@@ -2,6 +2,9 @@ package lab5.barBossHouse;
 
 import lab5.barBossHouse.tests.Tests;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 
 public class Main {
@@ -10,35 +13,30 @@ public class Main {
 
         Tests labTest = new Tests();
 
-        Integer d1 = 1;
-        Integer d2 = 2;
-        Integer d3 = 3;
-        Integer d4 = 4;
-        Integer d5 = 5;
-        Integer d10 = 10;
-        ArrayList<Integer> list = new ArrayList<>();
-        list.add(d1);
-        list.add(d2);
-        list.add(d4);
-        //list.add(d10);
+        InternetOrder ord1 = new InternetOrder(labTest.items, labTest.customer);
+        InternetOrder ord2 = new InternetOrder(labTest.items, labTest.customer);
+        InternetOrder ord3 = new InternetOrder(labTest.items, labTest.customer);
+        InternetOrder ord4 = new InternetOrder(labTest.items, labTest.customer);
+        InternetOrder ord5 = new InternetOrder(labTest.items, labTest.customer);
+        ord1.setOrdCreationTime(1991, Month.AUGUST,20,12,1);
+        ord2.setOrdCreationTime(1991, Month.AUGUST,20,12,2);
+        ord3.setOrdCreationTime(1991, Month.AUGUST,20,12,3);
+        ord4.setOrdCreationTime(1991, Month.AUGUST,20,12,0);
+        ord5.setOrdCreationTime(1991, Month.AUGUST,20,12,0);
 
-        MyDeque<Integer> dec = new MyDeque<>(10);
-        dec.addLast(d1);
-        dec.addLast(d1);
-        dec.addLast(d2);
-        dec.addLast(d3);
-        dec.addLast(d4);
-        dec.addLast(d4);
+        InternetOrdersManager manager = new InternetOrdersManager();
 
+        manager.addLast(ord1);
+        manager.addLast(ord2);
+        manager.addLast(ord3);
+        manager.addLast(ord4);
+        manager.addLast(ord5);
 
-
-        System.out.println(dec + "\n");
-
-        System.out.println(dec);
-
-        System.out.println("end");
         System.out.println(
-                labTest.internetOrdersManager.size()
+                manager.getOrdersAtDay(LocalDateTime.of(
+                        1991,Month.AUGUST,20,12,0
+                    )
+                )
         );
     }
 }
