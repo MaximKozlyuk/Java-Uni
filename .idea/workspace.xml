@@ -2,24 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c378f877-180e-4612-a048-368ce128301a" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/ControlledInternetOrder.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/ControlledInternetOrderManager.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/ControlledTableOrder.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/ControlledTableOrderManager.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/FileSource.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerBinaryFileSource.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerFileSource.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerSerializedFileSource.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerTextFileSource.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrdersFactoryTypesEnumeration.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/Source.java" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/InternetOrder.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/InternetOrder.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/InternetOrdersManager.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/InternetOrdersManager.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/Main.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/Main.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/Order.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/Order.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/TableOrder.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/TableOrder.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/TableOrdersManager.java" afterPath="$PROJECT_DIR$/src/main/java/lab5/barBossHouse/TableOrdersManager.java" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path=".idea/" />
@@ -136,8 +119,8 @@
       <file leaf-file-name="OrderManagerTextFileSource.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerTextFileSource.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="4" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+            <state relative-caret-position="126">
+              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -686,7 +669,7 @@
       <workItem from="1525028553677" duration="1940000" />
       <workItem from="1525037632482" duration="7035000" />
       <workItem from="1525095278245" duration="17181000" />
-      <workItem from="1525123374329" duration="13000000" />
+      <workItem from="1525123374329" duration="13247000" />
     </task>
     <task id="LOCAL-00001" summary="first commit">
       <created>1522780618114</created>
@@ -730,7 +713,14 @@
       <option name="project" value="LOCAL" />
       <updated>1525103832664</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Lab 6 task 5">
+      <created>1525184135205</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1525184135205</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -766,7 +756,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="149232000" />
+    <option name="totallyTimeSpent" value="149479000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -793,7 +783,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291536" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41342413" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41342413" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -877,7 +867,8 @@
     <MESSAGE value="Deque added" />
     <MESSAGE value="deleted old files" />
     <MESSAGE value="Lab 5 done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Lab 5 done" />
+    <MESSAGE value="Lab 6 task 5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Lab 6 task 5" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1329,8 +1320,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/lab5/barBossHouse/io/OrderManagerTextFileSource.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="4" lean-forward="false" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
+        <state relative-caret-position="126">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
