@@ -45,8 +45,8 @@ public class TableOrder implements Order {
         creationTime = LocalDateTime.now();
     }
 
-    public void setCreationTime(int year, Month month, int day, int hour, int minutes) {
-        creationTime = LocalDateTime.of(year, month, day, hour, minutes);
+    public void setCreationTime(int year, Month month, int day, int hour, int minutes, int seconds, int nanoseconds) {
+        creationTime = LocalDateTime.of(year, month, day, hour, minutes, seconds, nanoseconds);
     }
 
     public LocalDateTime getCreationTime() {

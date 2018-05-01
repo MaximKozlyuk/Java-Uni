@@ -1,6 +1,7 @@
 package lab5.barBossHouse;
 
 import lab5.barBossHouse.io.ControlledTableOrder;
+import lab5.barBossHouse.io.OrderManagerTextFileSource;
 import lab5.barBossHouse.tests.Tests;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,8 @@ import java.time.Month;
 public class Main {
 
     public static void main(String[] args) {
+
+        System.out.println(System.nanoTime());
 
         Tests labTest = new Tests();
 
@@ -19,11 +22,11 @@ public class Main {
         InternetOrder ord3 = new InternetOrder(labTest.items, labTest.customer);
         InternetOrder ord4 = new InternetOrder(labTest.items, labTest.customer);
         InternetOrder ord5 = new InternetOrder(labTest.items, labTest.customer);
-        ord1.setCreationTime(1991, Month.AUGUST,20,12,1);
-        ord2.setCreationTime(1991, Month.AUGUST,20,12,2);
-        ord3.setCreationTime(1991, Month.AUGUST,20,12,3);
-        ord4.setCreationTime(1991, Month.AUGUST,20,12,0);
-        ord5.setCreationTime(1991, Month.AUGUST,20,12,0);
+        ord1.setCreationTime(1991, Month.AUGUST,20,12,1,30,1);
+        ord2.setCreationTime(1991, Month.AUGUST,20,12,1,30,2);
+        ord3.setCreationTime(1991, Month.AUGUST,20,12,3,0,0);
+        ord4.setCreationTime(1991, Month.AUGUST,20,12,0,0,0);
+        ord5.setCreationTime(1991, Month.AUGUST,20,12,0,0,0);
 
         InternetOrdersManager manager = new InternetOrdersManager();
 
@@ -39,5 +42,12 @@ public class Main {
                     )
                 )
         );
+
+
+        OrderManagerTextFileSource omtfs = new OrderManagerTextFileSource();
+        //omtfs.create(ord3);
+        //omtfs.create(ord2);
+        omtfs.delete(ord2);
+        omtfs.delete(ord3);
     }
 }

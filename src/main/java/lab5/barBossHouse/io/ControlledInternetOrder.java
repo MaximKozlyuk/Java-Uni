@@ -26,15 +26,17 @@ public class ControlledInternetOrder extends InternetOrder {
                 LocalDateTime.now().getMonth(),
                 LocalDateTime.now().getDayOfMonth(),
                 LocalDateTime.now().getHour(),
-                LocalDateTime.now().getMinute()
+                LocalDateTime.now().getMinute(),
+                LocalDateTime.now().getSecond(),
+                LocalDateTime.now().getNano()
         );
     }
 
     protected boolean isChanged () { return isChanged; }
 
     @Override
-    public void setCreationTime(int year, Month month, int day, int hour, int minutes) {
-        super.setCreationTime(year, month, day, hour, minutes);
+    public void setCreationTime(int year, Month month, int day, int hour, int minutes, int seconds, int nanoseconds) {
+        super.setCreationTime(year, month, day, hour, minutes, seconds, nanoseconds);
     }
 
     @Override

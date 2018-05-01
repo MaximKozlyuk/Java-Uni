@@ -1,6 +1,6 @@
 package lab5.barBossHouse.io;
 
-import lab2.barBossHouse.Order;
+import lab5.barBossHouse.Order;
 
 public interface FileSource extends Source<Order> {
 
