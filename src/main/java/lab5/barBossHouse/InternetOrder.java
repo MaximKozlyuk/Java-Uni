@@ -10,7 +10,6 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
 
     private Customer customer;
     private MyList<MenuItem> menu;
-
     private LocalDateTime creationTime;
 
     public InternetOrder() {
@@ -25,7 +24,7 @@ public class InternetOrder implements Order, Iterable<MenuItem> {
         creationTime = LocalDateTime.now();
     }
 
-    public void setOrdCreationTime(int year, Month month, int day, int hour, int minutes) {
+    public void setCreationTime(int year, Month month, int day, int hour, int minutes) {
         creationTime = LocalDateTime.of(year, month, day, hour, minutes);
     }
 

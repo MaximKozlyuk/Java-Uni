@@ -1,6 +1,5 @@
 package lab5.barBossHouse;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Deque;
@@ -125,22 +124,20 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
 
     @Override
     public void addFirst(Order order) {
-        orders.addFirst((InternetOrder) order);
+        orders.addFirst(order);
     }
 
     @Override
     public void addLast(Order order) {
-        orders.addLast((InternetOrder) order);
+        orders.addLast(order);
     }
 
     @Override
-    public boolean offerFirst(Order order) {
-        return orders.offerFirst((InternetOrder) order);
-    }
+    public boolean offerFirst(Order order) { return orders.offerFirst(order); }
 
     @Override
     public boolean offerLast(Order order) {
-        return orders.offerLast((InternetOrder) order);
+        return orders.offerLast(order);
     }
 
     @Override
@@ -195,7 +192,7 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
 
     @Override
     public boolean offer(Order order) {
-        return orders.offer((InternetOrder) order);
+        return orders.offer(order);
     }
 
     @Override
@@ -247,7 +244,7 @@ public class InternetOrdersManager implements OrdersManager, Deque<Order> {
     public boolean contains(Object o) {
         if (o == null) { throw new NullPointerException(); }
         if (!(o instanceof InternetOrder)) { throw new ClassCastException(); }
-        return orders.contains((InternetOrder)o);
+        return orders.contains(o);
     }
 
     @Override

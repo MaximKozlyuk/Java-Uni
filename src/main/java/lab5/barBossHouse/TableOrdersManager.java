@@ -9,6 +9,10 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     private Order[] orders;
 
+    private final static int DEFAULT_ORDERS_CAP = 16;
+
+    public TableOrdersManager () { this(DEFAULT_ORDERS_CAP); }
+
     public TableOrdersManager(int tablesAmount) throws NegativeSizeException {
         if (tablesAmount < 0) {
             throw new NegativeSizeException("Tables amount < 0");
@@ -28,9 +32,7 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     public int getOrdersAtDay(LocalDateTime date) {
         int counter = 0;
         for (int i = 0; i < orders.length; i++) {
-            if (orders[i] == null) {
-                continue;
-            }
+            if (orders[i] == null) { continue; }
             if (orders[i].getCreationTime().getYear() == date.getYear() &&
                     orders[i].getCreationTime().getMonth() == date.getMonth() &&
                     orders[i].getCreationTime().getDayOfMonth() == date.getDayOfMonth()) {
@@ -112,12 +114,12 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
         int counter = 0;
         for (int i = 0; i < orders.length; i++) {
             if (orders[i].equals(order)) {
+                remove(i);
                 ++counter;
             }
         }
-        if (counter == 0) {
-            return -1;
-        } else return counter;
+        if (counter == 0) { return -1; }
+        return counter;
     }
 
     public int getFreeTableID() {
@@ -195,14 +197,13 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     // lab 5
 
     @Override
-    public boolean addAll(int index, Collection<? extends Order> c) {   // todo understand logic
+    public boolean addAll(int index, Collection<? extends Order> c) {   // todo recode
         if (index < 0 || index >= orders.length) { throw new IndexOutOfBoundsException("Illegal table number: " + index); }
-        if (c == null) { throw new NullPointerException("Collection is null"); }
         while (c.iterator().hasNext()) {
             try {
                 orders[getFreeTableID()] = c.iterator().next();
             } catch (NoFreeTableException e) {
-                throw new NoFreeTableException("not enough space to addLast all orders");
+                throw new NoFreeTableException("not enough space to add all orders");
             }
         }
         return true;
@@ -210,7 +211,14 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
 
     @Override
     public boolean addAll(Collection<? extends Order> c) {
-        return false;
+        for (Object coll : c) {
+            try {
+                orders[getFreeTableID()] = (TableOrder)coll;
+            } catch (NoFreeTableException exp) {
+                throw new NoFreeTableException("not enough space to add all orders");
+            }
+        }
+        return true;
     }
 
     @Override
@@ -418,9 +426,8 @@ public class TableOrdersManager implements OrdersManager, List<Order> {
     @Override
     public boolean containsAll(Collection<?> c) {
         if (c == null) { throw new NullPointerException(); }
-        Iterator iterator = c.iterator();
-        while (iterator.hasNext()) {
-            if (contains(iterator.next())) {
+        for (Object coll : c) {
+            if (contains(coll)) {
                 return false;
             }
         }

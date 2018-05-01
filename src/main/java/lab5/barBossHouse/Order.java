@@ -34,7 +34,7 @@ public interface Order extends List<MenuItem> {
 
     void setCustomer(Customer customer);
 
-    void setOrdCreationTime(int year, Month month, int day, int hour, int minutes);
+    void setCreationTime(int year, Month month, int day, int hour, int minutes);
 
     LocalDateTime getCreationTime();
 
